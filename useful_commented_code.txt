@@ -1,0 +1,12 @@
+# t = int(input("enter test cases: "))
+# a = b= c = d= 0
+# for i in range(t):
+    # rSample = random.sample(SHUFFLE_COLUMN * 2, 3)
+    # print(rSample)
+    # a += rSample.count('A')
+    # b += rSample.count('B')
+    # c += rSample.count('C')
+    # d += rSample.count('D')
+# print(a,b,c,d,sep=" ")
+# tSamples = t * 3
+# print(f"Total samples picked {tSamples}\nA:{a/tSamples}\nB:{b/tSamples}\nC:{c/tSamples}\nD:{d/tSamples}\n")

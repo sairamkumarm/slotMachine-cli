@@ -4,6 +4,16 @@ MAX_LINES =3
 MAX_BET = 1000
 MIN_BET = 1
 SHUFFLE_COLUMN = ['A', 'B', 'B', 'C', 'C', 'C', 'D', 'D', 'D', 'D']
+WINNINGS = {
+    "AAA": 3,
+    "BBB": 2.5,
+    "CCC": 2,
+    "DDD": 1.5,
+    "AA": 1.25,
+    "BB": 1,
+    "CC": 0.75,
+    "DD": 0.5,
+}
 
 def validateInput(label, minVal=1, maxVal=10000, extra=""):
     prefix = "$" if (label != "lines") else ""
@@ -74,25 +84,28 @@ def run_slots():
     endMatrix = shuffleSample(initColumn)
     return endMatrix
 
+def getResults(slots):
+    print(slots)
+    for i in range(2):
+        for j in range(2):
+            if slots[i][j] != slots[i][j+1]:
+                slots[i][j] = '0'
+    print(slots)
+    newSlots = ["".join(row) for row in slots]
+    # sortedSlots = ["".join(sorted(s)) for s in newSlots]
+    # print(newSlots)
+    winningSlots = []
+
+
+
+
 def main():
     #balance = deposit()
     # lines, bet, balance = takebets(balance)
     slots = run_slots()
     printslots(slots)
-    
-    # t = int(input("enter test cases: "))
-    # a = b= c = d= 0
-    # for i in range(t):
-        # rSample = random.sample(SHUFFLE_COLUMN * 2, 3)
-        # print(rSample)
-        # a += rSample.count('A')
-        # b += rSample.count('B')
-        # c += rSample.count('C')
-        # d += rSample.count('D')
-    # print(a,b,c,d,sep=" ")
-    # tSamples = t * 3
-    # print(f"Total samples picked {tSamples}\nA:{a/tSamples}\nB:{b/tSamples}\nC:{c/tSamples}\nD:{d/tSamples}\n")
-    return 0
+    getResults(slots)
+
 
 
 main()
