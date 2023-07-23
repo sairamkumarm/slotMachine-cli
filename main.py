@@ -1,11 +1,14 @@
+import random
+
 MAX_LINES =3
 MAX_BET = 1000
 MIN_BET = 1
+SHUFFLE_COLUMN = ['A', 'B', 'B', 'C', 'C', 'C', 'D', 'D', 'D', 'D']
 
-def validateInput(label, minVal=1, maxVal=10000):
+def validateInput(label, minVal=1, maxVal=10000, extra=""):
     prefix = "$" if (label != "lines") else ""
     while True:
-        value = input(f"Enter the {label} for betting" + f" [{prefix}{minVal} - {prefix}{maxVal}]" + f": {prefix}")
+        value = input(f"Enter the {label} for betting" + f" [{prefix}{minVal} - {prefix}{maxVal}]" + f"{extra}: {prefix}")
         if value.isdigit():
             value = int(value)
             if minVal <= value <= maxVal:
@@ -24,15 +27,71 @@ def deposit():
 
 
 def takebets(accountBalance):
+    '''Takes bets including number of lines to bet on and the amount bet on each of those lines'''
     lines = validateInput("lines", maxVal=3)
-    betPerLine = validateInput("bet amount", maxVal=accountBalance)
+    maxBetPerLine = round((accountBalance/lines),2)
+    betPerLine = validateInput("bet amount", maxVal=maxBetPerLine, extra="(per line | whole dollars only)")
     betAmount = lines * betPerLine
-    return betAmount
+    accountBalance -= betAmount
+    print(
+        f'''
+           Betting Invoice
+        ---------------------
+        Bet amount:     ${betPerLine}
+        Lines selected: {lines}
+        _____________________
+        Total bet:      ${betAmount}
+        Account Balance:${accountBalance}
+        ''')
+    return lines, betAmount, accountBalance
+
+def printslots(matrix):
+    flatmatrix = [elem for row in matrix for elem in row]
+    a, b, c, d, e, f, g, h, i = flatmatrix
+    print(f'''
+╭───────────╮
+│   SLOTS   │
+│ ╭─╮╭─╮╭─╮ │
+│ │{a}││{b}││{c}│ │
+│ │{d}││{e}││{f}│ │
+│ │{g}││{h}││{i}│ │
+│ ╰─╯╰─╯╰─╯ │
+╰───────────╯
+''')
+
+def shuffleSample(column):
+    for i in range(random.randint(1, 10)):
+        random.shuffle(column)
+    col1 = random.sample(column * 3, 3)
+    col2 = random.sample(column * 3, 3)
+    col3 = random.sample(column * 3, 3)
+    initMatrix = [col1, col2, col3]
+    initMatrix = [list(row) for row in zip(*initMatrix)]
+    return initMatrix
+
+def run_slots():
+    initColumn = SHUFFLE_COLUMN
+    endMatrix = shuffleSample(initColumn)
+    return endMatrix
 
 def main():
-    balance = deposit()
-    bet = takebets(balance)
-    balance -= bet
+    #balance = deposit()
+    # lines, bet, balance = takebets(balance)
+    slots = run_slots()
+    printslots(slots)
+    
+    # t = int(input("enter test cases: "))
+    # a = b= c = d= 0
+    # for i in range(t):
+        # rSample = random.sample(SHUFFLE_COLUMN * 2, 3)
+        # print(rSample)
+        # a += rSample.count('A')
+        # b += rSample.count('B')
+        # c += rSample.count('C')
+        # d += rSample.count('D')
+    # print(a,b,c,d,sep=" ")
+    # tSamples = t * 3
+    # print(f"Total samples picked {tSamples}\nA:{a/tSamples}\nB:{b/tSamples}\nC:{c/tSamples}\nD:{d/tSamples}\n")
     return 0
 
 
