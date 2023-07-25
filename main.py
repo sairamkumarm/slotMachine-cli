@@ -36,7 +36,7 @@ def deposit():
     return depositAmount
 
 
-def takebets(accountBalance):
+def takeBets(accountBalance):
     '''Takes bets including number of lines to bet on and the amount bet on each of those lines'''
     lines = validateInput("lines", maxVal=3)
     maxBetPerLine = round((accountBalance/lines),2)
@@ -45,19 +45,19 @@ def takebets(accountBalance):
     accountBalance -= betAmount
     print(
         f'''
-           Betting Invoice
-        ---------------------
+            Betting Invoice
+        -----------------------
         Bet amount:     ${betPerLine}
         Lines selected: {lines}
-        _____________________
+        _______________________
         Total bet:      ${betAmount}
         Account Balance:${accountBalance}
         ''')
     return lines, betAmount, accountBalance
 
-def printslots(matrix):
-    flatmatrix = [elem for row in matrix for elem in row]
-    a, b, c, d, e, f, g, h, i = flatmatrix
+def printSlots(matrix):
+    flatMatrix = [elem for row in matrix for elem in row]
+    a, b, c, d, e, f, g, h, i = flatMatrix
     print(f'''
 ╭───────────╮
 │   SLOTS   │
@@ -85,26 +85,37 @@ def run_slots():
     return endMatrix
 
 def getResults(slots):
-    print(slots)
-    for i in range(2):
-        for j in range(2):
-            if slots[i][j] != slots[i][j+1]:
-                slots[i][j] = '0'
-    print(slots)
-    newSlots = ["".join(row) for row in slots]
-    # sortedSlots = ["".join(sorted(s)) for s in newSlots]
-    # print(newSlots)
-    winningSlots = []
+    for slot in list(slots):
+        if (slot[0] != slot[1] and slot[1] != slot[2] and slot[0] != slot[2]):
+            slots.remove(slot)
+        elif (slot[0] == slot[2] and (slot[0] != slot[1])):
+            slot.remove(slot[1])
+        elif (slot[1] != slot[0]):
+            slot.remove(slot[0])
+        elif (slot[1] != slot[2]):
+            slot.remove(slot[2])
+    winningSlots = ["".join(row) for row in slots]
+    winningSlots = sorted(winningSlots, key=lambda x: (-len(x), x))
+    print(winningSlots)
+    return winningSlots
 
-
-
+def calcWinnings(lines, results):
+    results = results[:(lines)]
+    winList = []
+    for res in results:
+        if res in WINNINGS:
+            winList.append(WINNINGS[res])
+    finalWinnings = sum(winList)
+    return finalWinnings
 
 def main():
     #balance = deposit()
-    # lines, bet, balance = takebets(balance)
+    # lines, bet, balance = takeBets(balance)
+    lines = 2
     slots = run_slots()
-    printslots(slots)
-    getResults(slots)
+    printSlots(slots)
+    calcWinnings(lines,getResults(slots))
+
 
 
 
