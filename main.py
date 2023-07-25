@@ -96,7 +96,7 @@ def getResults(slots):
             slot.remove(slot[2])
     winningSlots = ["".join(row) for row in slots]
     winningSlots = sorted(winningSlots, key=lambda x: (-len(x), x))
-    print(winningSlots)
+    # print(winningSlots)
     return winningSlots
 
 def calcWinnings(lines, results):
@@ -109,14 +109,14 @@ def calcWinnings(lines, results):
     return finalWinnings
 
 def main():
-    #balance = deposit()
-    # lines, bet, balance = takeBets(balance)
-    lines = 2
-    slots = run_slots()
-    printSlots(slots)
-    calcWinnings(lines,getResults(slots))
-
-
-
+    balance = deposit()
+    while(balance > 0):
+        lines, bet, balance = takeBets(balance)
+        slots = run_slots()
+        printSlots(slots)
+        winnings = calcWinnings(lines,getResults(slots))
+        winnings *= bet
+        balance += winnings
+        print(f"bet : {bet}, won: {winnings}, balance: {balance}")
 
 main()
